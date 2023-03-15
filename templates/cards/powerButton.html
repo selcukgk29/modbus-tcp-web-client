@@ -1,0 +1,164 @@
+<div class="card shadow">
+  <span class="edit-on-click">Power</span>
+  <a class="button off">
+    <span class="sc sc-right"></span>
+    <span class="sc sc-left"></span>
+    <span class="bar"></span>
+  </a>
+</div>
+<style>
+  .button {
+    display: block;
+    width: 140px;
+    height: 140px;
+    position: relative;
+    border-radius: 50%;
+    background: #304a68;
+    transition: 0.6s;
+    cursor: pointer;
+    margin-top: 35px;
+    margin-left: 35px;
+  }
+  .button.ready {
+    transform: scale(0.8);
+    transition: 0.3s;
+  }
+  .button.ready .sc::after {
+    color: #82d22e;
+  }
+  .button.turn-off .sc-right::after {
+    transition-delay: 0.3s;
+  }
+  .button.turn-off .sc-left::after {
+    transition-timing-function: ease-in;
+  }
+  .button.off .sc::after {
+    transform: rotate(-180deg);
+  }
+  .button.off.ready .sc-right::after {
+    transform: rotate(-90deg);
+    transition-delay: 0s;
+  }
+  .button.off.ready .bar::before {
+    height: 50%;
+    transition: 0.3s;
+  }
+  .button.turn-on .sc-right::after {
+    transform: rotate(0deg);
+    transition-timing-function: ease-in;
+  }
+  .button.turn-on .sc-left::after {
+    transform: rotate(0deg);
+    transition-delay: 0.3s;
+  }
+  .button.turn-on .bar::before {
+    height: 100%;
+  }
+  .button.on .sc::after {
+    transform: rotate(0deg);
+  }
+  .button.on .bar::before {
+    height: 100%;
+  }
+  .button.on.ready .sc-left::after {
+    transform: rotate(-90deg);
+    transition-delay: 0s;
+  }
+  .button.on.ready .bar::before {
+    height: 50%;
+    transition: 0.3s;
+  }
+  .sc {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 66px;
+    height: 132px;
+    transform: translate(-100%, -50%);
+    overflow: hidden;
+  }
+  .sc:first-child {
+    transform: translate(0%, -50%) rotate(180deg);
+  }
+  .sc::before,
+  .sc::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100% - 8px);
+    height: calc(100% - (8px * 2));
+    border: solid rgba(0, 0, 0, 0.3);
+    border-width: 8px 0 8px 8px;
+    border-radius: 100px 0 0 100px;
+    transform: rotate(0deg);
+    transform-origin: 100% 50%;
+    transition: 0.3s;
+    color: #98e744;
+    content: "";
+  }
+  .sc::after {
+    border-color: currentColor;
+    transform: rotate(-180deg);
+  }
+  .bar {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 50px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+  }
+  .bar::before {
+    display: block;
+    height: 0;
+    border-radius: 8px;
+    background: #98e744;
+    transition: 0.6s;
+    content: "";
+  }
+  a[rel] {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    color: #1f2c3b;
+    font: 11px Tahoma, Helvetica, sans-serif;
+    text-decoration: none;
+  }
+</style>
+<script>
+  const button = document.querySelector(".button");
+  const nextClassName = {
+    off: "turn-on",
+    on: "turn-off",
+    "turn-on": "on",
+    "turn-off": "off",
+  };
+  const finishState = () => {
+    const isTurning = button.classList.value.includes("turn-");
+    if (isTurning) {
+      toggleState();
+    }
+  };
+  const toggleState = () => {
+    const className = button.classList.item(1);
+    button.classList.remove(className);
+    console.log(nextClassName[className]);
+    button.classList.add(nextClassName[className]);
+    let state = nextClassName[className] === "on" ? 1 : 0;
+    console.log(nextClassName[className]);
+    $.get("/api", { power: state }, function (data) {
+      console.log(state);
+    });
+    offReady();
+  };
+  const onReady = () => button.classList.add("ready");
+  const offReady = () => button.classList.remove("ready");
+
+  button.addEventListener("click", toggleState);
+  button.addEventListener("transitionend", finishState);
+  button.addEventListener("mouseenter", onReady);
+  button.addEventListener("mouseleave", offReady);
+</script>

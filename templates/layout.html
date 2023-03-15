@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/jquery.roundslider/1.0/roundslider.min.css"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="../static/css/header-style.css" />
+    <link rel="stylesheet" href="../static/css/general-style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.roundslider/1.0/roundslider.min.js"></script>
+    <script src="../static/js/sliders.js"></script>
+    <title>Anasayfa</title>
+  </head>
+  <body>
+    {% include './includes/header.html' %}
+    <div class="container">
+      {% include './cards/roundslieder.html' %} {% include
+      './cards/writeRegister.html' %} {% include './cards/verticalSlider.html'
+      %} {% include './cards/powerButton.html' %}
+    </div>
+  </body>
+</html>
